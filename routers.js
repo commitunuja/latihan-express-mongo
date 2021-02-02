@@ -1,7 +1,37 @@
 const express = require('express')
 const routers = express.Router();
 
+const multer = require('multer')
+const imageFilter = (req, file, cb) => {
+    if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
+        return cb(null, false)
+    }
+    cb(null, true)
+}
+const upload = multer({ dest: 'public', fileFilter: imageFilter })
+
+
 routers.get('/', (req, res) => res.send('Hello World!'))
+
+routers.post('/upload', upload.single('file'), (req, res) => {
+    const file = req.file
+    if (file) {
+        const target = path.join(__dirname, 'public', file.originalname)
+        fs.renameSync(file.path, target)
+        res.send('file berhasil diupload')
+    } else {
+        res.send('file gagal diupload')
+    }
+})
+
+
+routers.post('/register', upload.single('avatar'), (req, res) => {
+    const name = req.body.name
+    const avatar = req.file
+    res.send({ name: name, avatar: avatar })
+})
+
+
 
 // req semua method
 routers.all('/universal', function (req, res) {
