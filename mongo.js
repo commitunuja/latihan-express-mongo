@@ -19,7 +19,9 @@ const connectionString = "mongodb://user_latihan:123456@localhost:27017?authSour
         const db = client.db("latihan")
         // get collection table
         const quote = await db.collection("quote").find().toArray()
+        const coba = await db.collection("coba").find().toArray()
         console.table(quote);
+        console.table(coba);
     } catch (error) {
         console.log(error);
     }
