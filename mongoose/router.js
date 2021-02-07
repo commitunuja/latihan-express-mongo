@@ -2,6 +2,7 @@ const express = require('express');
 const routers = express.Router()
 require('./connection')
 const Product = require('./product')
+const Doa = require('./doa')
 const multer = require('multer')
 
 routers.get('/products', async (req, res) => {
@@ -125,5 +126,46 @@ routers.delete('/products/:id', async (req, res) => {
     }
 })
 
+routers.get('/doa', async (req, res) => {
+    const doa = await Doa.find()
+    if (doa.length > 0) {
+        res.send({
+            status: 'success',
+            message: 'list doa ditemukan',
+            data: doa
+        })
+    } else {
+        res.send({
+            status: 'success',
+            message: 'list doa tidak ditemukan',
+        })
+    }
+})
 
+routers.post('/doa', multer().none(), async (req, res) => {
+    const { title, body } = req.body
+    try {
+        const doa = await Doa.create({
+            title: title,
+            body: body,
+        })
+        if (doa) {
+            res.send({
+                status: 'success',
+                message: 'tambah doa success',
+                data: doa
+            })
+        } else {
+            res.send({
+                status: 'warning',
+                message: 'tambah doa gagal',
+            })
+        }
+    } catch (error) {
+        res.send({
+            status: 'error',
+            message: error.message,
+        })
+    }
+})
 module.exports = routers
