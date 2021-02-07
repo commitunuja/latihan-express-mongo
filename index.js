@@ -3,7 +3,7 @@ const app = express();
 const port = 3000;
 
 // router
-const router = require('./routers');
+const router = require('./mongoose/router');
 app.use(router);
 
 // menangani request body
@@ -37,9 +37,6 @@ const errorHandling = (err, req, res, next) => {
     })
 }
 app.use(errorHandling)
-
-
-
 
 app.listen(port, () => {
     console.log(`Server berjalan di http:://localhost/${port}`);
